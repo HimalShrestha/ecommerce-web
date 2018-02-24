@@ -86,39 +86,28 @@ export default {
     addItemsToCart (product) {
       var _return = true
       var items = []
-      var itemsInCart = window.sessionStorage.getItem('cartProducts')
-      var _itemsInCart = JSON.parse(itemsInCart)
-      if (_itemsInCart === null || _itemsInCart.length === 0) {
+      if (this.$store.state.cartItems.length === 0) {
         items.push(product)
-        this.cart = items
+        this.$store.state.cartItems = items
+        this.$store.state.cartBadge = items.length
         window.sessionStorage.setItem('cartProducts', JSON.stringify(items))
       } else {
-        var additionalItems = _itemsInCart
-
-        additionalItems.forEach((item) => {
+        this.$store.state.cartItems.forEach((item) => {
           if (item.ProductID === product.ProductID) {
-            window.alert('already exists')
             _return = false
+            window.alert('already exists')
           }
         })
         if (_return) {
-          additionalItems.push(product)
-          console.log('additional', additionalItems)
-          this.cart = additionalItems
-          window.sessionStorage.setItem('cartProducts', JSON.stringify(additionalItems))
+          this.$store.state.cartItems.push(product)
+          this.$store.state.cartBadge = this.$store.state.cartItems.length
+          window.sessionStorage.setItem('cartProducts', JSON.stringify(this.$store.state.cartItems))
         } else return _return
       }
-    },
-    itemRefresh () {
-      console.log('refreshed')
-      this.cart = []
     }
   },
   created () {
-    console.log(this.$store.state.count)
-    this.cart = []
     Events.$on('addToCart', this.addItemsToCart)
-    Events.$on('removeItem', this.itemRefresh)
     // category
     this.$http.get('/api/v1/product/category', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       this.category = response.data
@@ -137,6 +126,9 @@ export default {
     }).catch(err => {
       console.log('this is an error ', err)
     })
+  },
+  beforeDestroy () {
+    Events.$off('addToCart', this.addItemsToCart)
   }
 }
 </script>

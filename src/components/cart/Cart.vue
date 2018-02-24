@@ -28,7 +28,7 @@
 
 <script>
 import Item from './Item.vue'
-import {Events} from '@/events.js'
+// import {Events} from '@/events.js'
 export default {
   components: {'cart-item': Item},
   name: 'Cart',
@@ -54,14 +54,14 @@ export default {
     removeItem (item) {
       var removeIndex = this.cart.map(function (i) { return i.ProductID }).indexOf(item)
       this.cart.splice(removeIndex, 1)
+      this.$store.state.cartItems = this.cart
+      this.$store.state.cartBadge = this.cart.length
       window.sessionStorage.setItem('cartProducts', JSON.stringify(this.cart))
-      Events.$emit('removeItem')
     }
   },
   created () {
-    var retrived = window.sessionStorage.getItem('cartProducts')
-    this.cart = JSON.parse(retrived)
-    console.log(this.cart)
+    var retrived = this.$store.state.cartItems
+    this.cart = retrived
   },
   props: ['itemProp']
 }

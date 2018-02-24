@@ -18,11 +18,12 @@ Vue.prototype.$loggedIn = false
 
 const store = new Vuex.Store({
   state: {
-    count: 0
+    cartItems: [],
+    cartBadge: 0
   },
   mutations: {
-    increment (state) {
-      state.count++
+    increment (cartItems) {
+      // state.count++
     }
   }
 })

@@ -38,7 +38,7 @@
   					<b-col sm="8">
   						<div class="float-right">
                 <ul class="nav main-nav">
-                  <li><router-link to="/cart" @click="cartData"><i class="fa fa-shopping-cart"></i> Cart</router-link></li>
+                  <li><router-link to="/cart" @click="cartData"><i class="fa fa-shopping-cart"></i> Cart <b-badge variant="dark">{{this.$store.state.cartBadge}}</b-badge></router-link></li>
                   <li><router-link to="/checkout"><i class="fa fa-crosshairs"></i> Checkout</router-link></li>
   								<li v-if="this.loggedIn"><router-link to="#"><i class="fa fa-user"></i> Account</router-link></li>
   								<!-- <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li> -->
@@ -225,10 +225,10 @@ export default {
   },
 
   created () {
-    // Events.$on('addToCart', (product) => {
-    //   console.log(product)
-    //   // this.cart.push(product)
-    // })
+    if (window.sessionStorage.getItem('cartProducts')) {
+      this.$store.state.cartItems = JSON.parse(window.sessionStorage.getItem('cartProducts'))
+      this.$store.state.cartBadge = this.$store.state.cartItems.length
+    }
 
     // check login
     this.$http.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
@@ -385,5 +385,8 @@ a:hover{
 }
 .payment-logo{
 
+}
+.router-link-active{
+  color:#fe980f;
 }
 </style>
