@@ -77,7 +77,7 @@
                   <div class="invalid-feedback d-block" v-if="$v.confirmPassword.$error && !$v.confirmPassword.sameAs">Must be same as Password</div>
                   <div class="invalid-feedback d-block" v-if="$v.confirmPassword.$error && !$v.confirmPassword.required">Required</div>
                 </b-form-group>
-                <button type="submit" class="btn btn-default" :disabled="$v.$invalid">Login</button>
+                <b-btn type="submit" :disabled="$v.$invalid" block class="mt-3" variant="outline-primary">Register</b-btn>
               </b-form>
             </div><!--/login form-->
           </b-col>
@@ -90,7 +90,7 @@
 <script>
 const { required, email, minLength, alpha, sameAs } = require('vuelidate/lib/validators')
 export default {
-  name: 'Login',
+  name: 'Register',
   data () {
     return {
       email: '',
@@ -113,7 +113,11 @@ export default {
       event.preventDefault()
       this.$http.post('/api/v1/member/register', {username: this.email, password: this.password, fname: this.firstName, lname: this.lastName}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
         console.log('success')
-        this.$router.push('/login')
+        if (this.checkout === 'checkout') {
+          this.$router.go('/')
+        } else {
+          this.$router.push('/login')
+        }
         // window.location.href = '/login'
       }).catch(error => {
         console.log('this is an error ', error.response)
@@ -133,7 +137,8 @@ export default {
 
   },
   created () {
-  }
+  },
+  props: ['checkout']
 }
 </script>
 
@@ -141,8 +146,8 @@ export default {
 <style scoped lang="scss">
 #form{
   display: block;
-  margin-bottom: 185px;
-  margin-top: 185px;
+  margin-bottom: 85px;
+  margin-top: 85px;
   overflow: hidden;
   form input{
     background: #F0F0E9;
@@ -164,14 +169,14 @@ export default {
     font-weight: 300;
     margin-bottom: 30px;
   }
-  button{
-    background: #FE980F;
-  border: medium none;
-  border-radius: 0;
-  color: #FFFFFF;
-  display: block;
-  padding: 6px 25px;
-  }
+  // button{
+  //   background: #FE980F;
+  // border: medium none;
+  // border-radius: 0;
+  // color: #FFFFFF;
+  // display: block;
+  // padding: 6px 25px;
+  // }
 }
 
 </style>

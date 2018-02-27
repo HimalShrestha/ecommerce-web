@@ -39,12 +39,12 @@
   						<div class="float-right">
                 <ul class="nav main-nav">
                   <li><router-link to="/cart" @click="cartData"><i class="fa fa-shopping-cart"></i> Cart <b-badge variant="dark">{{this.$store.state.cartBadge}}</b-badge></router-link></li>
-                  <li><router-link to="/checkout"><i class="fa fa-crosshairs"></i> Checkout</router-link></li>
-  								<li v-if="this.loggedIn"><router-link to="#"><i class="fa fa-user"></i> Account</router-link></li>
+                  <!-- <li><router-link to="/checkout"><i class="fa fa-crosshairs"></i> Checkout</router-link></li> -->
+  								<li v-if="this.$store.state.isLoggedIn"><router-link to="/account"><i class="fa fa-user"></i> Account</router-link></li>
   								<!-- <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li> -->
-                  <li v-if="!this.loggedIn"><router-link to="/register"><i class="fa fa-user"></i> Register</router-link></li>
-                  <li v-if="!this.loggedIn"><router-link to="/login"><i class="fa fa-lock"></i> Login</router-link></li>
-                  <li v-if="this.loggedIn"><a href="#" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                  <li v-if="!this.$store.state.isLoggedIn"><router-link to="/register"><i class="fa fa-user"></i> Register</router-link></li>
+                  <li v-if="!this.$store.state.isLoggedIn"><router-link to="/login"><i class="fa fa-lock"></i> Login</router-link></li>
+                  <li v-if="this.$store.state.isLoggedIn"><a href="#" @click="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
   							</ul>
   						</div>
   					</b-col>
@@ -91,7 +91,9 @@
         </b-container>
   		</div><!--/header-bottom-->
   	</header><!--/header-->
-    <router-view></router-view>
+    <transition>
+      <router-view></router-view>
+    </transition>
     <footer id="footer"><!--Footer-->
   		<div class="footer-top">
   			<b-container>
@@ -233,10 +235,11 @@ export default {
     // check login
     this.$http.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       if (response.data === null) {
-        this.$loggedIn = false
+        this.$store.state.isLoggedIn = false
         this.loggedIn = false
       } else {
-        this.$loggedIn = true
+        this.$store.state.isLoggedIn = true
+        this.$store.state.userId = response.data.user.id
         this.loggedIn = true
       }
     }).catch(err => {
@@ -262,6 +265,21 @@ export default {
         console.log('this is an error ', err.response)
       })
     }
+  },
+  beforeCreate () {
+    // check login
+    this.$http.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+      if (response.data === null) {
+        this.$store.state.isLoggedIn = false
+        this.loggedIn = false
+      } else {
+        this.$store.state.isLoggedIn = true
+        this.$store.state.userId = response.data.user.id
+        this.loggedIn = true
+      }
+    }).catch(err => {
+      console.log('this is an error ', err)
+    })
   }
 }
 </script>

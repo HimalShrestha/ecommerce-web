@@ -57,6 +57,13 @@
           </div>
         </b-col>
       </b-row>
+      <b-modal ref="alert" hide-footer centered size="sm">
+      <div class="d-block text-center">
+        <i :class="{'far fa-check-circle text-success':this.iconSuccess,'fas fa-info text-warning':this.iconWarning}" style="font-size:3rem"></i>
+        <h3 style="margin-top:30px;font-size:1rem;font-weight:300;">{{modalMessage}}</h3>
+      </div>
+      <b-btn class="mt-3 mb-3" @click="$router.push('/cart')" variant="warning lg"><i class="fa fa-shopping-cart"></i> View Cart</b-btn>
+    </b-modal>
     </b-container>
   </div>
 </template>
@@ -71,6 +78,9 @@ export default {
     return {
       category: [],
       priceRange: '2',
+      iconSuccess: false,
+      iconWarning: true,
+      modalMessage: 'Item already added to cart',
       priceOptions: [
         {value: '1', text: '< 1000'},
         {value: '2', text: '1000 - 10000'},
@@ -83,25 +93,46 @@ export default {
     }
   },
   methods: {
+    showSuccess (msg) {
+      this.iconSuccess = true
+      this.iconWarning = false
+      this.modalMessage = msg
+      this.showModal()
+    },
+    showWarning (msg) {
+      this.iconSuccess = false
+      this.iconWarning = true
+      this.modalMessage = msg
+      this.showModal()
+    },
+    showModal () {
+      this.$refs.alert.show()
+    },
+    hideModal () {
+      this.$refs.alert.hide()
+    },
     addItemsToCart (product) {
       var _return = true
       var items = []
+      product['itemCount'] = 1
       if (this.$store.state.cartItems.length === 0) {
         items.push(product)
         this.$store.state.cartItems = items
         this.$store.state.cartBadge = items.length
         window.sessionStorage.setItem('cartProducts', JSON.stringify(items))
+        this.showSuccess('Item Added to Cart')
       } else {
         this.$store.state.cartItems.forEach((item) => {
           if (item.ProductID === product.ProductID) {
             _return = false
-            window.alert('already exists')
+            this.showWarning('Item already in Cart')
           }
         })
         if (_return) {
           this.$store.state.cartItems.push(product)
           this.$store.state.cartBadge = this.$store.state.cartItems.length
           window.sessionStorage.setItem('cartProducts', JSON.stringify(this.$store.state.cartItems))
+          this.showSuccess('Item Added to Cart')
         } else return _return
       }
     }

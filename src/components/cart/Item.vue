@@ -39,17 +39,24 @@ export default {
     incrementItem () {
       if (this.updatedValue > 99) {
         return false
-      } else this.updatedValue += 1
+      } else {
+        this.updatedValue += 1
+        this.itemProp.itemCount += 1
+      }
+      this.$emit('updateTotal')
     },
     decrementItem () {
       if (this.updatedValue < 2) {
         return false
-      } else this.updatedValue -= 1
+      } else {
+        this.updatedValue -= 1
+        this.itemProp.itemCount -= 1
+      }
+      this.$emit('updateTotal')
     },
     removeItem () {
       this.$emit('remove', this.itemProp.ProductID)
     }
-
   },
   created () {
   },

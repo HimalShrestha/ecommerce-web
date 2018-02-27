@@ -37,7 +37,7 @@
                 <b-form-checkbox-group v-model="keepSignedIn">
                   <b-form-checkbox value="me">Keep me logged in</b-form-checkbox>
                 </b-form-checkbox-group>
-                <button type="submit" class="btn btn-default">Login</button>
+                <b-btn type="submit" block class="mt-3" variant="outline-primary">Login</b-btn>
               </b-form>
             </div><!--/login form-->
           </b-col>
@@ -69,8 +69,11 @@ export default {
     login (event) {
       event.preventDefault()
       this.$http.post('/api/v1/auth/login/user', {username: this.username, password: this.password}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
-        // this.$router.push('/')
-        window.location.href = '/'
+        if (this.checkout === 'checkout') {
+          this.$router.go('/')
+        } else {
+          window.location.href = '/'
+        }
       }).catch(error => {
         console.log('this is an error ', error.response)
         if (error.response.data.error[0] === 'Incorrect username.') {
@@ -94,7 +97,8 @@ export default {
 
   },
   created () {
-  }
+  },
+  props: ['checkout']
 }
 </script>
 
@@ -102,8 +106,8 @@ export default {
 <style scoped lang="scss">
 #form{
   display: block;
-  margin-bottom: 185px;
-  margin-top: 185px;
+  margin-bottom: 85px;
+  margin-top: 85px;
   overflow: hidden;
   form input{
     background: #F0F0E9;
@@ -125,14 +129,14 @@ export default {
     font-weight: 300;
     margin-bottom: 30px;
   }
-  button{
-    background: #FE980F;
-  border: medium none;
-  border-radius: 0;
-  color: #FFFFFF;
-  display: block;
-  padding: 6px 25px;
-  }
+  // button{
+  //   background: #FE980F;
+  // border: medium none;
+  // border-radius: 0;
+  // color: #FFFFFF;
+  // display: block;
+  // padding: 6px 25px;
+  // }
 }
 
 </style>

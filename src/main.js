@@ -6,9 +6,8 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import Vuelidate from 'vuelidate'
-import Vuex from 'vuex'
+import store from './store'
 
-Vue.use(Vuex)
 Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 
@@ -16,16 +15,25 @@ Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.prototype.$loggedIn = false
 
-const store = new Vuex.Store({
-  state: {
-    cartItems: [],
-    cartBadge: 0
-  },
-  mutations: {
-    increment (cartItems) {
-      // state.count++
+// router.beforeEach(function (to, from, next) {
+//   setTimeout(() => {
+//     window.scrollTo(0, 0)
+//   }, 100)
+//   next()
+// })
+
+router.beforeEach((to, from, next) => {
+  axios.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+    if (response.data === null) {
+      store.state.isLoggedIn = false
+      next()
+    } else {
+      store.state.isLoggedIn = true
+      next()
     }
-  }
+  }).catch(err => {
+    console.log('this is an error ', err)
+  })
 })
 
 /* eslint-disable no-new */
