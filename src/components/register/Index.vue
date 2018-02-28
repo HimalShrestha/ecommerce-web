@@ -111,7 +111,7 @@ export default {
   methods: {
     register (event) {
       event.preventDefault()
-      this.$http.post('/api/v1/member/register', {username: this.email, password: this.password, fname: this.firstName, lname: this.lastName}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
+      this.$http.post(this.API_ENDPOINT + '/api/v1/member/register', {username: this.email, password: this.password, fname: this.firstName, lname: this.lastName}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
         console.log('success')
         if (this.checkout === 'checkout') {
           this.$router.go('/')

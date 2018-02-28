@@ -50,27 +50,21 @@
             <div class="products">
               <b-row class="justify-content-center">
                 <b-col sm="6" md="4" v-for="p in products" :key="p.ProductID">
-                  <product-card :product="p"/>
+                  <product-card :product="p" @viewProduct="viewProduct"/>
                 </b-col>
               </b-row>
             </div>
           </div>
         </b-col>
       </b-row>
-      <b-modal ref="alert" hide-footer centered size="sm">
-      <div class="d-block text-center">
-        <i :class="{'far fa-check-circle text-success':this.iconSuccess,'fas fa-info text-warning':this.iconWarning}" style="font-size:3rem"></i>
-        <h3 style="margin-top:30px;font-size:1rem;font-weight:300;">{{modalMessage}}</h3>
-      </div>
-      <b-btn class="mt-3 mb-3" @click="$router.push('/cart')" variant="warning lg"><i class="fa fa-shopping-cart"></i> View Cart</b-btn>
-    </b-modal>
+
     </b-container>
   </div>
 </template>
 
 <script>
 import ProductCard from '../shared/ProductCard.vue'
-import {Events} from '@/events.js'
+// import {Events} from '@/events.js'
 export default {
   components: {'product-card': ProductCard},
   name: 'Home',
@@ -78,9 +72,6 @@ export default {
     return {
       category: [],
       priceRange: '2',
-      iconSuccess: false,
-      iconWarning: true,
-      modalMessage: 'Item already added to cart',
       priceOptions: [
         {value: '1', text: '< 1000'},
         {value: '2', text: '1000 - 10000'},
@@ -93,6 +84,9 @@ export default {
     }
   },
   methods: {
+    viewProduct (id) {
+      console.log(id)
+    },
     showSuccess (msg) {
       this.iconSuccess = true
       this.iconWarning = false
@@ -110,57 +104,32 @@ export default {
     },
     hideModal () {
       this.$refs.alert.hide()
-    },
-    addItemsToCart (product) {
-      var _return = true
-      var items = []
-      product['itemCount'] = 1
-      if (this.$store.state.cartItems.length === 0) {
-        items.push(product)
-        this.$store.state.cartItems = items
-        this.$store.state.cartBadge = items.length
-        window.sessionStorage.setItem('cartProducts', JSON.stringify(items))
-        this.showSuccess('Item Added to Cart')
-      } else {
-        this.$store.state.cartItems.forEach((item) => {
-          if (item.ProductID === product.ProductID) {
-            _return = false
-            this.showWarning('Item already in Cart')
-          }
-        })
-        if (_return) {
-          this.$store.state.cartItems.push(product)
-          this.$store.state.cartBadge = this.$store.state.cartItems.length
-          window.sessionStorage.setItem('cartProducts', JSON.stringify(this.$store.state.cartItems))
-          this.showSuccess('Item Added to Cart')
-        } else return _return
-      }
     }
   },
   created () {
-    Events.$on('addToCart', this.addItemsToCart)
+    // Events.$on('addToCart', this.addItemsToCart)
     // category
-    this.$http.get('/api/v1/product/category', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+    this.$http.get(this.API_ENDPOINT + '/api/v1/product/category', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       this.category = response.data
     }).catch(err => {
       console.log('this is an error ', err)
     })
     // Product
-    this.$http.get('/api/v1/product/', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+    this.$http.get(this.API_ENDPOINT + '/api/v1/product/', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       this.products = response.data
     }).catch(err => {
       console.log('this is an error ', err)
     })
     // carousel
-    this.$http.get('/api/v1/carousel/', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+    this.$http.get(this.API_ENDPOINT + '/api/v1/carousel/', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       this.carousel = response.data
     }).catch(err => {
       console.log('this is an error ', err)
     })
-  },
-  beforeDestroy () {
-    Events.$off('addToCart', this.addItemsToCart)
   }
+  // beforeDestroy () {
+  //   Events.$off('addToCart', this.addItemsToCart)
+  // }
 }
 </script>
 

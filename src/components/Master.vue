@@ -32,7 +32,7 @@
   				<b-row class="align-items-center">
   					<b-col sm="4">
   						<div class="logo float-left">
-  							<a href="index.html"><img src="@/assets/logo.png" alt="" /></a>
+  							<a href="#" @click="$router.push('/')"><img src="@/assets/logo.png" alt="" /></a>
   						</div>
   					</b-col>
   					<b-col sm="8">
@@ -60,23 +60,15 @@
                 <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
                 <b-collapse is-nav id="nav_collapse">
                   <b-navbar-nav>
-                    <b-nav-item href="#">Link</b-nav-item>
-                    <b-nav-item href="#" disabled>Disabled</b-nav-item>
+                    <b-nav-item href="#" @click="$router.push('/')">Home</b-nav-item>
+                    <b-nav-item href="#">How to</b-nav-item>
                     <b-nav-item-dropdown text="Lang" right>
                       <b-dropdown-item href="#">EN</b-dropdown-item>
                       <b-dropdown-item href="#">ES</b-dropdown-item>
                       <b-dropdown-item href="#">RU</b-dropdown-item>
                       <b-dropdown-item href="#">FA</b-dropdown-item>
                     </b-nav-item-dropdown>
-
-                    <b-nav-item-dropdown right>
-                      <!-- Using button-content slot -->
-                      <template slot="button-content">
-                        <em>User</em>
-                      </template>
-                      <b-dropdown-item href="#">Profile</b-dropdown-item>
-                      <b-dropdown-item href="#">Signout</b-dropdown-item>
-                    </b-nav-item-dropdown>
+                    <b-nav-item href="#">Contact</b-nav-item>
                   </b-navbar-nav>
 
                 </b-collapse>
@@ -212,6 +204,13 @@
   		</div>
 
   	</footer><!--/Footer-->
+    <b-modal ref="alert" hide-footer centered size="sm">
+    <div class="d-block text-center">
+      <i :class="{'far fa-check-circle text-success':this.iconSuccess,'fas fa-info text-warning':this.iconWarning}" style="font-size:3rem"></i>
+      <h3 style="margin-top:30px;font-size:1rem;font-weight:300;">{{modalMessage}}</h3>
+    </div>
+    <b-btn class="mt-3 mb-3" @click="$router.push('/cart'),hideModal()" variant="warning lg"><i class="fa fa-shopping-cart"></i> View Cart</b-btn>
+  </b-modal>
   </div>
 </template>
 
@@ -222,18 +221,22 @@ export default {
   data () {
     return {
       loggedIn: false,
-      cart: []
+      cart: [],
+      iconSuccess: false,
+      iconWarning: true,
+      modalMessage: 'Item already added to cart'
     }
   },
 
   created () {
+    Events.$on('addToCart', this.addItemsToCart)
     if (window.sessionStorage.getItem('cartProducts')) {
       this.$store.state.cartItems = JSON.parse(window.sessionStorage.getItem('cartProducts'))
       this.$store.state.cartBadge = this.$store.state.cartItems.length
     }
 
     // check login
-    this.$http.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+    this.$http.get(this.API_ENDPOINT + '/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       if (response.data === null) {
         this.$store.state.isLoggedIn = false
         this.loggedIn = false
@@ -247,6 +250,50 @@ export default {
     })
   },
   methods: {
+    showSuccess (msg) {
+      this.iconSuccess = true
+      this.iconWarning = false
+      this.modalMessage = msg
+      this.showModal()
+    },
+    showWarning (msg) {
+      this.iconSuccess = false
+      this.iconWarning = true
+      this.modalMessage = msg
+      this.showModal()
+    },
+    showModal () {
+      this.$refs.alert.show()
+    },
+    hideModal () {
+      this.$refs.alert.hide()
+    },
+    addItemsToCart (product) {
+      console.log('hit')
+      var _return = true
+      var items = []
+      product['itemCount'] = 1
+      if (this.$store.state.cartItems.length === 0) {
+        items.push(product)
+        this.$store.state.cartItems = items
+        this.$store.state.cartBadge = items.length
+        window.sessionStorage.setItem('cartProducts', JSON.stringify(items))
+        this.showSuccess('Item Added to Cart')
+      } else {
+        this.$store.state.cartItems.forEach((item) => {
+          if (item.ProductID === product.ProductID) {
+            _return = false
+            this.showWarning('Item already in Cart')
+          }
+        })
+        if (_return) {
+          this.$store.state.cartItems.push(product)
+          this.$store.state.cartBadge = this.$store.state.cartItems.length
+          window.sessionStorage.setItem('cartProducts', JSON.stringify(this.$store.state.cartItems))
+          this.showSuccess('Item Added to Cart')
+        } else return _return
+      }
+    },
     cartData () {
       Events.$emit('cart', this.cart)
     },
@@ -256,7 +303,7 @@ export default {
     logout (e) {
       e.preventDefault()
       // logout
-      this.$http.get('/api/v1/auth/logout', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+      this.$http.get(this.API_ENDPOINT + '/api/v1/auth/logout', {headers: { 'Content-Type': 'application/json' }}).then(response => {
         console.log('logged out', response)
         if (response.status === 200) {
           window.location.href = '/'
@@ -268,7 +315,7 @@ export default {
   },
   beforeCreate () {
     // check login
-    this.$http.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+    this.$http.get(this.API_ENDPOINT + '/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
       if (response.data === null) {
         this.$store.state.isLoggedIn = false
         this.loggedIn = false

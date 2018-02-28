@@ -21,9 +21,21 @@ Vue.prototype.$loggedIn = false
 //   }, 100)
 //   next()
 // })
+if (process.env.NODE_ENV === 'production') {
+  Vue.prototype.API_ENDPOINT = 'http://202.79.34.189:7711'
+  Vue.prototype.WEB_ROOT = 'http://202.79.34.189:7711'
+}
+
+if (process.env.NODE_ENV === 'development') {
+  Vue.prototype.API_ENDPOINT = 'http://localhost:8888'
+  Vue.prototype.WEB_ROOT = 'http://localhost:9999'
+}
 
 router.beforeEach((to, from, next) => {
-  axios.get('/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+  setTimeout(() => {
+    window.scrollTo(0, 0)
+  }, 100)
+  axios.get(Vue.prototype.API_ENDPOINT + '/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
     if (response.data === null) {
       store.state.isLoggedIn = false
       next()

@@ -5,13 +5,14 @@
         style="max-width: 20rem;"
         :img-src="'/api/v1/product/image/'+product.ProductID"
         img-alt="Image"
-        img-top>
+        img-top
+        @click="showDetails">
       <b-card-body>
         <h3 class="product-price"><i class="fas fa-rupee-sign"></i> {{product.ProductPrice}}</h3>
           <p class="product-name">
               {{product.ProductName}}
           </p>
-        <button type="button" class="add-to-cart" @click="addToCart"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+        <button type="button" class="add-to-cart" @click.stop="addToCart"><i class="fa fa-shopping-cart"></i> Add to cart</button>
       </b-card-body>
     </b-card>
   </div>
@@ -29,6 +30,9 @@ export default {
   methods: {
     addToCart () {
       Events.$emit('addToCart', this.product)
+    },
+    showDetails () {
+      this.$router.push('/product/' + this.product.ProductID)
     }
   },
   created () {
@@ -41,6 +45,11 @@ export default {
 <style scoped>
   .product-card{
     margin-bottom:30px;
+    cursor:pointer;
+    transition: box-shadow 0.2s linear;
+  }
+  .product-card:hover{
+    box-shadow:0px 0px 3px 3px #FE980F;
   }
   .add-to-cart{
     background: #F5F5ED;

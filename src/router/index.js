@@ -7,6 +7,7 @@ import Register from '@/components/register/Index'
 import Cart from '@/components/cart/Cart'
 import Checkout from '@/components/cart/Checkout'
 import Account from '@/components/account/Account'
+import Product from '@/components/home/Product'
 
 Vue.use(Router)
 
@@ -47,6 +48,12 @@ export default new Router({
           name: 'Account',
           path: '/account',
           component: Account
+        },
+        {
+          name: 'Product',
+          path: '/product/:prodId',
+          component: Product,
+          props: true
         }
       ]
     }
