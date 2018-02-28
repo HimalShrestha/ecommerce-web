@@ -3,7 +3,7 @@
   <div class="product-card">
     <b-card no-body
         style="max-width: 20rem;"
-        :img-src="'/api/v1/product/image/'+product.ProductID"
+        :img-src="API_ENDPOINT+'/api/v1/product/image/'+product.ProductID"
         img-alt="Image"
         img-top
         @click="showDetails">

@@ -4,7 +4,7 @@
     <b-container style="text-align:left">
       <b-row>
         <b-col sm="4">
-          <img :src="'/api/v1/product/image/'+product.ProductID" alt="something" style="width:100%"/>
+          <img :src="API_ENDPOINT+'/api/v1/product/image/'+product.ProductID" alt="something" style="width:100%"/>
         </b-col>
         <b-col sm="8">
           <div class="product-overview">

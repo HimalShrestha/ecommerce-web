@@ -2,7 +2,7 @@
   <!--eslint-disable-->
 	<tr>
 		<td class="cart_product">
-			<a href=""><img :src="'/api/v1/product/image/'+itemProp.ProductID" alt=""></a>
+			<a href=""><img :src="API_ENDPOINT+'/api/v1/product/image/'+itemProp.ProductID" alt=""></a>
 		</td>
 		<td class="cart_description">
 			<h4><a href="">{{itemProp.ProductName}}</a></h4>

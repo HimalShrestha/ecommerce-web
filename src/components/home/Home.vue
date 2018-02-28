@@ -17,7 +17,7 @@
         <b-carousel-slide v-for="c in carousel" :key="c.CarouselID"
                           caption="First slide"
                           :text="c.CarouselDesc"
-                          :img-src="'/api/v1/carousel/image/'+c.CarouselID"
+                          :img-src="API_ENDPOINT+'/api/v1/carousel/image/'+c.CarouselID"
 
 
         ></b-carousel-slide>
