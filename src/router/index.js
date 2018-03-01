@@ -8,6 +8,11 @@ import Cart from '@/components/cart/Cart'
 import Checkout from '@/components/cart/Checkout'
 import Account from '@/components/account/Account'
 import Product from '@/components/home/Product'
+import Contact from '@/components/info/Contact'
+import Faq from '@/components/info/Faq'
+import Howto from '@/components/info/Howto'
+import Error404 from '@/components/info/Error404'
+import Category from '@/components/home/Category'
 
 Vue.use(Router)
 
@@ -54,8 +59,31 @@ export default new Router({
           path: '/product/:prodId',
           component: Product,
           props: true
+        },
+        {
+          name: 'Contact',
+          path: '/contact',
+          component: Contact
+        },
+        {
+          name: 'Faq',
+          path: '/faq',
+          component: Faq
+        },
+        {
+          name: 'Howto',
+          path: '/howto',
+          component: Howto
+        },
+        {
+          name: 'Category',
+          path: '/category/:categoryId',
+          component: Category,
+          props: true
         }
       ]
-    }
+    },
+    // Always leave this last one
+    { path: '*', component: Error404 } // Not found
   ]
 })

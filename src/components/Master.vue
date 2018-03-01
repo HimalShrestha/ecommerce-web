@@ -61,14 +61,10 @@
                 <b-collapse is-nav id="nav_collapse">
                   <b-navbar-nav>
                     <b-nav-item href="#" @click="$router.push('/')">Home</b-nav-item>
-                    <b-nav-item href="#">How to</b-nav-item>
-                    <b-nav-item-dropdown text="Lang" right>
-                      <b-dropdown-item href="#">EN</b-dropdown-item>
-                      <b-dropdown-item href="#">ES</b-dropdown-item>
-                      <b-dropdown-item href="#">RU</b-dropdown-item>
-                      <b-dropdown-item href="#">FA</b-dropdown-item>
-                    </b-nav-item-dropdown>
-                    <b-nav-item href="#">Contact</b-nav-item>
+                    <b-nav-item href="#" @click="$router.push('/howto')">How to</b-nav-item>
+                    <b-nav-item href="#">Blog</b-nav-item>
+                    <b-nav-item href="#" @click="$router.push('/faq')">FAQs</b-nav-item>
+                    <b-nav-item href="#" @click="$router.push('/contact')">Contact</b-nav-item>
                   </b-navbar-nav>
 
                 </b-collapse>
@@ -139,9 +135,6 @@
   							<ul>
   								<li><a href="#">Online Help</a></li>
   								<li><a href="#">Contact Us</a></li>
-  								<li><a href="#">Order Status</a></li>
-  								<li><a href="#">Change Location</a></li>
-  								<li><a href="#">FAQ’s</a></li>
   							</ul>
   						</div>
   					</b-col>
@@ -149,10 +142,7 @@
   						<div class="single-widget">
   							<h2>Quick Shop</h2>
   							<ul>
-  								<li><a href="#">Online Help</a></li>
-  								<li><a href="#">Contact Us</a></li>
   								<li><a href="#">Order Status</a></li>
-  								<li><a href="#">Change Location</a></li>
   								<li><a href="#">FAQ’s</a></li>
   							</ul>
   						</div>
@@ -164,8 +154,6 @@
                   <li><a href="#">Terms of Use</a></li>
   								<li><a href="#">Privecy Policy</a></li>
   								<li><a href="#">Refund Policy</a></li>
-  								<li><a href="#">Billing System</a></li>
-  								<li><a href="#">Ticket System</a></li>
   							</ul>
   						</div>
   					</b-col>
@@ -175,8 +163,6 @@
   							<ul>
                   <li><a href="#">Company Information</a></li>
   								<li><a href="#">Careers</a></li>
-  								<li><a href="#">Store Location</a></li>
-  								<li><a href="#">Affillate Program</a></li>
   								<li><a href="#">Copyright</a></li>
   							</ul>
   						</div>
@@ -332,7 +318,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 a{
   text-decoration: none;
   display:inline-block;
@@ -452,6 +438,38 @@ a:hover{
 
 }
 .router-link-active{
-  color:#fe980f;
+  color:#fe980f !important;
+}
+h2.title{
+  color: #FE980F;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 15px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 0;
+}
+h2.title:before{
+  content: " ";
+  position: absolute;
+  background: #fff;
+  bottom: -6px;
+  width: 220px;
+  height: 30px;
+  z-index: -1;
+  left: 50%;
+  margin-left: -110px;
+}
+h2.title:after{
+  content: " ";
+  position: absolute;
+  border: 1px solid #f5f5f5;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 0;
+  z-index: -2;
 }
 </style>
