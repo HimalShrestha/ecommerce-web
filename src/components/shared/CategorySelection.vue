@@ -59,6 +59,7 @@ export default {
   font-size: 18px;
   font-weight: 700;
   margin: 0 auto 30px;
+  margin-top: 30px;
   text-align: center;
   text-transform: uppercase;
   position: relative;
