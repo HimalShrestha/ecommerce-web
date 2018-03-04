@@ -23,15 +23,15 @@
         ></b-carousel-slide>
       </b-carousel>
       <b-row style="margin-top:30px;">
-        <b-col sm="3">
+        <b-col md="3">
           <category-selection style="width:100%"/>
         </b-col>
-        <b-col sm="9">
+        <b-col md="9">
           <div class="content-area">
             <h2 class="title">Featured item</h2>
             <div class="products">
               <b-row class="justify-content-center">
-                <b-col sm="6" md="4" v-for="p in products" :key="p.ProductID">
+                <b-col sm="6" md="6" lg="4" v-for="p in products" :key="p.ProductID" class="justify-content-center resp-row">
                   <product-card :product="p" @viewProduct="viewProduct"/>
                 </b-col>
               </b-row>

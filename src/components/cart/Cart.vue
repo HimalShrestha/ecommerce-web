@@ -5,24 +5,16 @@
   		<b-container>
   			<b-breadcrumb :items="breadcrumbItems"/>
         <b-row v-if="this.$store.state.cartBadge!==0">
-          <b-col sm="12" class="table-responsive cart_info">
-    				<table class="table table-condensed">
-    					<thead>
-    						<tr class="cart_menu">
-    							<td class="image">Item</td>
-    							<td class="description">Description</td>
-    							<td class="price">Price</td>
-    							<td class="quantity">Quantity</td>
-    							<td class="total">Total</td>
-    							<td>Remove</td>
-    						</tr>
-    					</thead>
-  						<tbody v-for="p in cart">
+          <b-col md="8" sm="12" class="table-responsive cart_info">
+            <b-card title="My Cart"
+                    class="mb-2">
+                  <hr/>
+              <div class="card-body" v-for="p in cart">
                 <cart-item :itemProp="p" @remove="removeItem" @updateTotal="calculateTotal"/>
-              </tbody>
-    				</table>
+              </div>
+            </b-card>
     			</b-col>
-          <b-col sm="12">
+          <b-col md="4" sm="12" class="justify-content-center resp-row">
             <b-card title="Total"
                     style="max-width: 20rem;"
                     class="mb-2">

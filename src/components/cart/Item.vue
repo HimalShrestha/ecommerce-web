@@ -1,30 +1,25 @@
 <template>
   <!--eslint-disable-->
-	<tr>
-		<td class="cart_product">
-			<a href=""><img :src="API_ENDPOINT+'/api/v1/product/image/'+itemProp.ProductID" alt=""></a>
-		</td>
-		<td class="cart_description">
-			<h4><a href="">{{itemProp.ProductName}}</a></h4>
-			<p>{{itemProp.ProductCartDesc}}</p>
-		</td>
-		<td class="cart_price">
-			<p>{{itemProp.ProductPrice}}</p>
-		</td>
-		<td class="cart_quantity">
-			<div class="cart_quantity_button">
-        <a class="cart_quantity_down" @click="decrementItem"> - </a>
-				<input class="cart_quantity_input" type="text" name="quantity" v-model="updatedValue" autocomplete="off" size="2" disabled>
-				<a class="cart_quantity_up" @click="incrementItem"> + </a>
-			</div>
-		</td>
-		<td class="cart_total">
-			<p class="cart_total_price">{{updatedValue * itemProp.ProductPrice}}</p>
-		</td>
-		<td class="cart_delete">
-			<a class="cart_quantity_delete" @click="removeItem"><i class="fa fa-times"></i></a>
-		</td>
-	</tr>
+	<div style="text-align:left;">
+		<b-row>
+			<b-col sm="3" xs="6">
+				<a href="#" @click="$router.push(`/product/${itemProp.ProductID}`)" class="image-cont"><img :src="API_ENDPOINT+'/api/v1/product/image/'+itemProp.ProductID" alt="" style="width:100%;"></a>
+			</b-col>
+			<b-col sm="9" xs="6">
+				<a href="#" class="cart_quantity_delete float-right" @click="removeItem"><i class="fa fa-times"></i></a>
+				<p class="cart_price">{{this.$store.state.currency}}{{itemProp.ProductPrice}}</p>
+				<h4><a href="#" @click="$router.push(`/product/${itemProp.ProductID}`)">{{itemProp.ProductName}}</a></h4>
+				<p>{{itemProp.ProductCartDesc}}</p>
+				<div class="cart_quantity_button">
+					<a class="cart_quantity_down" @click="decrementItem"> - </a>
+					<input class="cart_quantity_input" type="text" name="quantity" v-model="updatedValue" autocomplete="off" size="2" disabled style="text-align:center;">
+					<a class="cart_quantity_up" @click="incrementItem"> + </a>
+				</div>
+				<p><span style="text-decoration:underline;">Sub-total:</span> <span class="cart_total_price">{{this.$store.state.currency}}{{updatedValue * itemProp.ProductPrice}}</span> </p>
+			</b-col>
+		</b-row>
+		<hr/>
+	</div>
 </template>
 
 <script>
@@ -66,39 +61,32 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-#form{
-  display: block;
-  margin-bottom: 185px;
-  margin-top: 185px;
-  overflow: hidden;
-  form input{
-    background: #F0F0E9;
-    // border: medium none;
-    color: #696763;
-    display: block;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
-    height: 40px;
-    margin-bottom: 10px;
-    outline: medium none;
-    padding-left: 10px;
-    width: 100%;
-  }
-  h2{
-    color: #696763;
-    font-size: 20px;
-    font-weight: 300;
-    margin-bottom: 30px;
-  }
-  button{
-    background: #FE980F;
-  border: medium none;
-  border-radius: 0;
-  color: #FFFFFF;
-  display: block;
-  padding: 6px 25px;
-  }
+.image-cont{
+display:block;
 }
-
+.cart_price{
+color: #2d2d2d;
+font-style: normal;
+font-weight: 700;
+padding: 0 .3em 0 0;
+font-size:1.5em;
+}
+.cart_quantity_button{
+user-select:none;
+-webkit-user-select:none;
+a{
+display: inline-block;
+padding:10px;
+cursor:pointer;
+font-weight: 900;
+font-size: 1.2em;
+}
+}
+.cart_total_price{
+font-size: 1.2em;
+font-weight: 900;
+}
+.cart_quantity_delete{
+font-size: 1.6em;
+}
 </style>

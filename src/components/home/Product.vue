@@ -8,15 +8,15 @@
         </b-col>
         <b-col sm="8">
           <div class="product-overview">
-            <h3>{{product.ProductName}}</h3>
-            <p>{{this.$store.state.currency}}{{product.ProductPrice}}</p>
-            <p>Seller: {{product.SellerName}}</p>
-            <p>Stock: {{product.ProductStock}}</p>
-            <a href="#">Find out more about the seller</a><br/>
-            <b-button variant="success" @click="addToCart">Add to Cart</b-button>
+            <h5 style="margin-bottom:1rem;">{{product.ProductName}}</h5>
+            <h3 style="color:#FE980F;font-weight:900">{{this.$store.state.currency}}{{product.ProductPrice}}</h3>
+            <p><span style="color:#000;font-size:1.2rem;font-weight:400;">Seller:</span> {{product.SellerName}}</p>
+            <p><span style="color:#000;font-size:1.2rem;font-weight:400;">Stock:</span> {{product.ProductStock}}</p>
+            <b-button variant="outline-success" @click="addToCart">Add to Cart</b-button>
           </div>
         </b-col>
       </b-row>
+      <hr/>
       <b-row>
         <b-col sm="4">
           <div class="product-detail-1">

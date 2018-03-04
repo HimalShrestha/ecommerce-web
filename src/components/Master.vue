@@ -9,7 +9,7 @@
   						<div class="contactinfo">
   							<ul class="nav nav-pills">
   								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-  								<li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+  								<li style="margin-left:20px;"><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
   							</ul>
   						</div>
   					</b-col>
@@ -94,22 +94,22 @@
   					</b-col>
   					<b-col sm="7">
               <b-row>
-    						<b-col sm="3">
+    						<b-col>
     							<div class="payment-logo">
   									<img src="@/assets/iframe4.png" alt="" />
     							</div>
     						</b-col>
-                <b-col sm="3">
+                <b-col>
     							<div class="payment-logo">
   									<img src="@/assets/iframe4.png" alt="" />
     							</div>
     						</b-col>
-                <b-col sm="3">
+                <b-col>
     							<div class="payment-logo">
   									<img src="@/assets/iframe4.png" alt="" />
     							</div>
     						</b-col>
-                <b-col sm="3">
+                <b-col>
     							<div class="payment-logo">
   									<img src="@/assets/iframe4.png" alt="" />
     							</div>
@@ -129,7 +129,7 @@
   		<div class="footer-widget">
   			<b-container class="text-left">
   				<b-row>
-  					<b-col sm="2">
+  					<b-col>
   						<div class="single-widget">
   							<h2>Service</h2>
   							<ul>
@@ -138,7 +138,7 @@
   							</ul>
   						</div>
   					</b-col>
-            <b-col sm="2">
+            <b-col>
   						<div class="single-widget">
   							<h2>Quick Shop</h2>
   							<ul>
@@ -147,7 +147,7 @@
   							</ul>
   						</div>
   					</b-col>
-            <b-col sm="2">
+            <b-col>
   						<div class="single-widget">
   							<h2>Policies</h2>
   							<ul>
@@ -157,7 +157,7 @@
   							</ul>
   						</div>
   					</b-col>
-            <b-col sm="2">
+            <b-col>
   						<div class="single-widget">
   							<h2>About Us</h2>
   							<ul>
@@ -167,12 +167,14 @@
   							</ul>
   						</div>
   					</b-col>
-  					<b-col sm="3" offset-sm="1">
+  					<b-col>
   						<div class="single-widget">
   							<h2>About Shopper</h2>
-  							<form action="#" class="searchform">
-  								<input type="text" placeholder="Your email address" />
-  								<button type="submit" class="btn btn-default"><i class="fa fa-phone"></i></button>
+  							<form action="#" class="">
+                  <div class="searchform">
+                    <input type="text" placeholder="Your email address" />
+                    <button type="submit" class="btn btn-default"><i class="fa fa-phone"></i></button>
+                  </div>
   								<p>Get the most recent updates from <br />our site and be updated your self...</p>
   							</form>
   						</div>
@@ -382,6 +384,7 @@ a:hover{
 }
 .single-widget{
   margin-bottom: 2rem;
+  min-width:100px;
 }
 .single-widget h2{
   color: #666663;
@@ -435,7 +438,7 @@ a:hover{
   margin-top:55px;
 }
 .payment-logo{
-
+  min-width:100%;
 }
 .router-link-active{
   color:#fe980f !important;
@@ -446,6 +449,7 @@ h2.title{
   font-size: 18px;
   font-weight: 700;
   margin: 0 15px;
+  margin-top:30px;
   text-transform: uppercase;
   margin-bottom: 30px;
   position: relative;
@@ -471,5 +475,33 @@ h2.title:after{
   width: 100%;
   height: 0;
   z-index: -2;
+}
+.invalid-feedback{
+  text-align: left;
+}
+.small-title{
+  font-weight: 900;
+  color:#FE980F;
+  font-size: 1.1em;
+
+}
+.searchform{
+  margin-bottom:15px;
+}
+.searchform input{
+  width:79%;
+}
+.searchform button{
+  width:20%;
+}
+@media only screen and (min-width:0px) and (max-width: 576px) {
+  .body{
+    font-size: 12px;
+  }
+  .resp-row{
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
 }
 </style>

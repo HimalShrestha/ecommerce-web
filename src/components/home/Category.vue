@@ -14,7 +14,7 @@
             <h2 class="title">{{pageName}}</h2>
             <div class="products">
               <b-row class="justify-content-center">
-                <b-col sm="6" md="4" v-for="p in products" :key="p.ProductID">
+                <b-col sm="6" md="6" lg="4" v-for="p in products" :key="p.ProductID" class="justify-content-center resp-row">
                   <product-card :product="p"/>
                 </b-col>
               </b-row>

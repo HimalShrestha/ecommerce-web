@@ -2,7 +2,7 @@
   <!--eslint-disable-->
   <div class="product-card">
     <b-card no-body
-        style="max-width: 20rem;"
+        style="max-width: 100%;"
         :img-src="API_ENDPOINT+'/api/v1/product/image/'+product.ProductID"
         img-alt="Image"
         img-top
@@ -61,6 +61,7 @@ export default {
     padding:10px 20px;
     cursor: pointer;
     margin-bottom: 10px;
+    width: 140px;
   }
   .add-to-cart:hover{
     background: #FE980F;
@@ -74,6 +75,11 @@ export default {
   }
   .product-name{
     font-weight: 700;
+  }
+  @media only screen and (min-width:0px) and (max-width: 576px) {
+    .product-card{
+      max-width:300px !important;
+    }
   }
 
 </style>
