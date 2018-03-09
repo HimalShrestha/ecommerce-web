@@ -280,11 +280,12 @@ export default {
       UserCountry: { required, maxLength: maxLength(50) },
       UserCity: { required, maxLength: maxLength(90) },
       UserState: { required, maxLength: maxLength(20) },
-      UserZip: { minLength: minLength(3), maxLength: maxLength(12), numeric }
+      UserZip: { required, minLength: minLength(3), maxLength: maxLength(12), numeric }
     }
   },
   methods: {
     confirmOrder () {
+      var lastProductID = this.cart[this.cart.length - 1].ProductID
       this.cart.forEach(item => {
         var tax = (parseInt(item.ProductPrice) * 13) / 100
         console.log(tax)
@@ -303,9 +304,12 @@ export default {
           'productId': item.ProductID
         }
         this.$http.post(this.API_ENDPOINT + '/api/v1/order', body, {headers: { 'Content-Type': 'application/json' }}).then(response => {
-          window.sessionStorage.setItem('cartProducts', JSON.stringify([]))
-          this.$store.state.cartItems = []
-          window.location.href = '/'
+          if (item.ProductID === lastProductID) {
+            console.log(lastProductID)
+            window.sessionStorage.setItem('cartProducts', JSON.stringify([]))
+            this.$store.state.cartItems = []
+            window.location.href = '/'
+          }
         }).catch(error => {
           console.log('this is an error ', error.response)
         })

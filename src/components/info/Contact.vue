@@ -160,11 +160,6 @@ export default {
     }
   }
 }
-.small-title{
-  font-weight: 900;
-  color:#e49f38;
-  font-size: 1.1em;
 
-}
 
 </style>

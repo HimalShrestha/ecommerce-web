@@ -68,7 +68,7 @@ export default {
   methods: {
     login (event) {
       event.preventDefault()
-      this.$http.post(this.API_ENDPOINT + '/api/v1/auth/login/user', {username: this.username, password: this.password}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
+      this.$http.post('/api/v1/auth/login/user', {username: this.username, password: this.password}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
         if (this.checkout === 'checkout') {
           this.$router.go('/')
         } else {
