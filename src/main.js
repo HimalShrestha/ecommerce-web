@@ -7,6 +7,9 @@ import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import Vuelidate from 'vuelidate'
 import store from './store'
+import { loadProgressBar } from 'axios-progress-bar'
+
+Vue.use(loadProgressBar)
 
 Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
@@ -32,9 +35,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 router.beforeEach((to, from, next) => {
-  setTimeout(() => {
-    window.scrollTo(0, 0)
-  }, 100)
   axios.get(Vue.prototype.API_ENDPOINT + '/api/v1/auth/checkLogin', {headers: { 'Content-Type': 'application/json' }}).then(response => {
     if (response.data === null) {
       store.state.isLoggedIn = false
