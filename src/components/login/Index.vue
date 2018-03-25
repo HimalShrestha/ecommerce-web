@@ -70,9 +70,21 @@ export default {
       event.preventDefault()
       this.$http.post('/api/v1/auth/login/user', {username: this.username, password: this.password}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
         if (this.checkout === 'checkout') {
-          this.$router.go('/')
+          if (response.data.status === 0) {
+            this.resetSession()
+          } else {
+            this.$router.go('/')
+          }
         } else {
-          window.location.href = '/'
+          // if (response.data.userVerified === 0) {
+          //   this.invalid.username = 'Please verify your account!'
+          //   this.state.username = false
+          // }
+          if (response.data.status === 0) {
+            this.resetSession()
+          } else {
+            window.location.href = '/'
+          }
         }
       }).catch(error => {
         console.log('this is an error ', error.response)
@@ -86,6 +98,20 @@ export default {
           console.log('something else is wrong')
         }
       })
+    },
+    resetSession () {
+      this.$http.get(this.API_ENDPOINT + '/api/v1/auth/logout', {headers: { 'Content-Type': 'application/json' }}).then(response => {
+        console.log('logged out', response)
+        if (response.status === 200) {
+          this.$store.state.isLoggedIn = false
+          this.$store.state.userId = ''
+          this.loggedIn = false
+        }
+      }).catch(err => {
+        console.log('this is an error ', err.response)
+      })
+      this.invalid.username = 'User is disabled, Contact Support'
+      this.state.username = false
     },
     resetValidation (field) {
       if (field === 'user') {

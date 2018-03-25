@@ -166,7 +166,7 @@
               </b-card>
               <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                  <b-btn block href="#" v-b-toggle.accordion2 variant="secondary" ref="step2">Step 2: Payment Methods</b-btn>
+                  <b-btn block href="#" v-b-toggle.accordion2 variant="secondary" ref="step2" :disabled="$v.user.$invalid">Step 2: Payment Methods</b-btn>
                 </b-card-header>
                 <b-collapse id="accordion2" accordion="my-accordion" role="tabpanel" style="text-align:left">
                   <b-card-body>
@@ -188,14 +188,14 @@
                   </b-card-body>
                   <b-card-footer>
                     <p class="float-left">Please select any payment Method</p>
-                    <b-btn class="float-right" variant="primary" v-b-toggle.accordion3>Next</b-btn>
+                    <b-btn class="float-right" variant="primary" v-b-toggle.accordion3 @click="step3disabled=false">Next</b-btn>
                     <div class="clearfix"></div>
                   </b-card-footer>
                 </b-collapse>
               </b-card>
               <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                  <b-btn block href="#" v-b-toggle.accordion3 variant="secondary">Step 3: Confirm Order</b-btn>
+                  <b-btn block href="#" v-b-toggle.accordion3 variant="secondary" :disabled="isDisabled">Step 3: Confirm Order</b-btn>
                 </b-card-header>
                 <b-collapse id="accordion3" accordion="my-accordion" role="tabpanel">
                   <b-card-body>
@@ -266,7 +266,8 @@ export default {
         text: 'Checkout',
         active: true
       }],
-      total: 0
+      total: 0,
+      step3disabled: true
     }
   },
   validations: {
@@ -281,6 +282,15 @@ export default {
       UserCity: { required, maxLength: maxLength(90) },
       UserState: { required, maxLength: maxLength(20) },
       UserZip: { required, minLength: minLength(3), maxLength: maxLength(12), numeric }
+    }
+  },
+  computed: {
+    isDisabled () {
+      if (this.$v.user.$invalid || this.step3disabled) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
@@ -346,7 +356,7 @@ export default {
       this.$http.get(this.API_ENDPOINT + '/api/v1/payment', {headers: { 'Content-Type': 'application/json' }}).then(response => {
         console.log(response)
         var paymentMethod = []
-        response.data.forEach(item => {
+        response.data.data.forEach(item => {
           var temp = { text: item.PaymentType, value: item.PaymentID }
           paymentMethod.push(temp)
         })

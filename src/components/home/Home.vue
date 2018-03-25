@@ -15,7 +15,7 @@
         <!-- Text slides with image -->
 
         <b-carousel-slide v-for="c in carousel" :key="c.CarouselID"
-                          caption="First slide"
+                          caption=""
                           :text="c.CarouselDesc"
                           :img-src="API_ENDPOINT+'/api/v1/carousel/image/'+c.CarouselID"
 
@@ -31,7 +31,10 @@
             <h2 class="title">Featured item</h2>
             <div class="products">
               <b-row class="justify-content-center">
-                <b-col sm="6" md="6" lg="4" v-for="p in products" :key="p.ProductID" class="justify-content-center resp-row">
+                <div v-if="noProduct">
+                  Sorry no product with in the price limit
+                </div>
+                <b-col sm="6" v-else md="6" lg="4" v-for="p in products" :key="p.ProductID" class="justify-content-center resp-row">
                   <product-card :product="p" @viewProduct="viewProduct"/>
                 </b-col>
               </b-row>
@@ -60,7 +63,8 @@ export default {
       productCount: '',
       currentPage: 1,
       size: 10,
-      pagination: true
+      pagination: true,
+      noProduct: false
     }
   },
   methods: {
@@ -90,6 +94,7 @@ export default {
     },
     filterProduct (range) {
       // console.log(range)
+      this.noProduct = false
       this.pagination = false
       var low, high
       if (range === '0') {
@@ -97,13 +102,13 @@ export default {
         high = 1000000000000
       } else if (range === '1') {
         low = 0
-        high = 1000
+        high = 999
       } else if (range === '2') {
         low = 1000
-        high = 10000
+        high = 9999
       } else if (range === '3') {
         low = 10000
-        high = 100000
+        high = 99999
       } else if (range === '4') {
         low = 100000
         high = 1000000000000
@@ -111,6 +116,9 @@ export default {
       this.$http.get(this.API_ENDPOINT + '/api/v1/product?size=' + this.size + '&low=' + low + '&high=' + high + '&page=' + this.currentPage, {headers: { 'Content-Type': 'application/json' }}).then(response => {
         this.products = response.data.data
         this.productCount = response.data.count
+        if (this.products.length === 0) {
+          this.noProduct = true
+        }
       }).catch(err => {
         console.log('this is an error ', err)
       })
