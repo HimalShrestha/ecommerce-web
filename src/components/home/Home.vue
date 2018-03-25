@@ -24,7 +24,7 @@
       </b-carousel>
       <b-row style="margin-top:30px;">
         <b-col md="3">
-          <category-selection style="width:100%"/>
+          <category-selection style="width:100%" @filter="filterProduct"/>
         </b-col>
         <b-col md="9">
           <div class="content-area">
@@ -35,6 +35,7 @@
                   <product-card :product="p" @viewProduct="viewProduct"/>
                 </b-col>
               </b-row>
+              <b-pagination-nav variant="danger" :link-gen="linkGen" align="center" :number-of-pages="Math.ceil(parseInt(productCount)/size)" v-model="currentPage" :class="{'d-none': !pagination}"/>
             </div>
           </div>
         </b-col>
@@ -55,10 +56,17 @@ export default {
     return {
       products: [],
       carousel: [],
-      cart: []
+      cart: [],
+      productCount: '',
+      currentPage: 1,
+      size: 10,
+      pagination: true
     }
   },
   methods: {
+    linkGen (pageNum) {
+      return '#/?page=' + pageNum
+    },
     viewProduct (id) {
       console.log(id)
     },
@@ -79,13 +87,61 @@ export default {
     },
     hideModal () {
       this.$refs.alert.hide()
+    },
+    filterProduct (range) {
+      // console.log(range)
+      this.pagination = false
+      var low, high
+      if (range === '0') {
+        low = 0
+        high = 1000000000000
+      } else if (range === '1') {
+        low = 0
+        high = 1000
+      } else if (range === '2') {
+        low = 1000
+        high = 10000
+      } else if (range === '3') {
+        low = 10000
+        high = 100000
+      } else if (range === '4') {
+        low = 100000
+        high = 1000000000000
+      }
+      this.$http.get(this.API_ENDPOINT + '/api/v1/product?size=' + this.size + '&low=' + low + '&high=' + high + '&page=' + this.currentPage, {headers: { 'Content-Type': 'application/json' }}).then(response => {
+        this.products = response.data.data
+        this.productCount = response.data.count
+      }).catch(err => {
+        console.log('this is an error ', err)
+      })
+    },
+    getProduct () {
+      this.$http.get(this.API_ENDPOINT + '/api/v1/product?size=' + this.size + '&page=' + this.currentPage, {headers: { 'Content-Type': 'application/json' }}).then(response => {
+        this.products = response.data.data
+        this.productCount = response.data.count
+      }).catch(err => {
+        console.log('this is an error ', err)
+      })
+    }
+  },
+  watch: {
+    // whenever question changes, this function will run
+    currentPage: function (naya, purano) {
+      this.getProduct()
     }
   },
   created () {
-    // Events.$on('addToCart', this.addItemsToCart)
+    if (this.$route.query.page) {
+      this.currentPage = parseInt(this.$route.query.page)
+    }
+    console.log(this.currentPage)
     // Product
-    this.$http.get(this.API_ENDPOINT + '/api/v1/product/', {headers: { 'Content-Type': 'application/json' }}).then(response => {
-      this.products = response.data
+    this.$http.get(this.API_ENDPOINT + '/api/v1/product?size=' + this.size + '&page=' + this.currentPage, {headers: { 'Content-Type': 'application/json' }}).then(response => {
+      this.products = response.data.data
+      this.productCount = response.data.count
+      if (this.size >= this.productCount) {
+        this.pagination = false
+      }
     }).catch(err => {
       console.log('this is an error ', err)
     })

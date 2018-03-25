@@ -172,9 +172,11 @@
   							<h2>About Shopper</h2>
   							<form action="#" class="">
                   <div class="searchform">
-                    <input type="text" placeholder="Your email address" />
-                    <button type="submit" class="btn btn-default"><i class="fa fa-phone"></i></button>
+                    <input type="email" placeholder="Your email address" v-model="email" @blur="$v.email.$touch"/>
+                    <button type="button" class="btn btn-default" @click="subscribe"><i class="fa fa-phone"></i></button>
                   </div>
+                  <div style="margin-top: -12px;" class="invalid-feedback d-block" v-if="$v.email.$error && !$v.email.required">Required</div>
+                  <div style="margin-top: -12px;" class="invalid-feedback d-block" v-if="$v.email.$error && !$v.email.email">Must be valid email</div>
   								<p>Get the most recent updates from <br />our site and be updated your self...</p>
   							</form>
   						</div>
@@ -197,13 +199,15 @@
       <i :class="{'far fa-check-circle text-success':this.iconSuccess,'fas fa-info text-warning':this.iconWarning}" style="font-size:3rem"></i>
       <h3 style="margin-top:30px;font-size:1rem;font-weight:300;">{{modalMessage}}</h3>
     </div>
-    <b-btn class="mt-3 mb-3" @click="$router.push('/cart'),hideModal()" variant="warning lg"><i class="fa fa-shopping-cart"></i> View Cart</b-btn>
+    <b-btn class="mt-3 mb-3" v-if="modalMessage==='You have subscribed to newsletter'" @click="hideModal()" variant="warning lg">Ok</b-btn>
+    <b-btn class="mt-3 mb-3" v-else @click="$router.push('/cart'),hideModal()" variant="warning lg"><i class="fa fa-shopping-cart"></i> View Cart</b-btn>
   </b-modal>
   </div>
 </template>
 
 <script>
 import {Events} from '@/events.js'
+const { required, email } = require('vuelidate/lib/validators')
 export default {
   name: 'Master',
   data () {
@@ -212,10 +216,13 @@ export default {
       cart: [],
       iconSuccess: false,
       iconWarning: true,
-      modalMessage: 'Item already added to cart'
+      modalMessage: 'Item already added to cart',
+      email: ''
     }
   },
-
+  validations: {
+    email: { required, email }
+  },
   created () {
     Events.$on('addToCart', this.addItemsToCart)
     if (window.sessionStorage.getItem('cartProducts')) {
@@ -238,6 +245,22 @@ export default {
     })
   },
   methods: {
+    subscribe (e) {
+      e.preventDefault()
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+      } else {
+        this.$http.post(this.API_ENDPOINT + '/api/v1/subscribe', {email: this.email}, {headers: { 'Content-Type': 'application/json' }}).then(response => {
+          console.log('logged out', response)
+          if (response.status === 200) {
+            this.showSuccess('You have subscribed to newsletter')
+            this.email = ''
+          }
+        }).catch(err => {
+          console.log('this is an error ', err.response)
+        })
+      }
+    },
     showSuccess (msg) {
       this.iconSuccess = true
       this.iconWarning = false

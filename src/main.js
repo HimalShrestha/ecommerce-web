@@ -25,7 +25,7 @@ Vue.prototype.$loggedIn = false
 //   next()
 // })
 if (process.env.NODE_ENV === 'production') {
-  Vue.prototype.API_ENDPOINT = 'http://202.79.34.189:7711'
+  Vue.prototype.API_ENDPOINT = ''
   Vue.prototype.WEB_ROOT = 'http://202.79.34.189:7711'
 }
 

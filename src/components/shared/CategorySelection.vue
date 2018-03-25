@@ -12,7 +12,7 @@
 
       <div class="price-range"><!--price-range-->
         <h2>Price Range</h2>
-        <b-form-select v-model="priceRange" :options="priceOptions" class="mb-3"/>
+        <b-form-select v-model="priceRange" :options="priceOptions" class="mb-3" @input="filterProduct(priceRange)"/>
       </div><!--/price-range-->
 
       <div class="shipping text-center"><!--shipping-->
@@ -31,15 +31,19 @@ export default {
     return {
       category: [],
       priceOptions: [
-        {value: '1', text: '< 1000'},
+        {value: '0', text: 'All'},
+        {value: '1', text: 'less than 1000'},
         {value: '2', text: '1000 - 10000'},
         {value: '3', text: '10000 - 100000'},
-        {value: '4', text: '> 100000'}
+        {value: '4', text: 'greater than 100000'}
       ],
-      priceRange: '2'
+      priceRange: '0'
     }
   },
   methods: {
+    filterProduct (range) {
+      this.$emit('filter', range)
+    }
   },
   created () {
     // category
